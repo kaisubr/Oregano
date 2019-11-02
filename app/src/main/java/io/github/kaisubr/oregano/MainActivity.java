@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-
         prefs = getSharedPreferences("io.github.kaisubr.forecast_budgeting", MODE_PRIVATE);
         prefs.edit().putBoolean("first", true).commit();//debug purposes
     }
@@ -27,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), Setup.class);
             startActivity(i);
             prefs.edit().putBoolean("first", false).commit();
+            
             finish();
         }
     }
