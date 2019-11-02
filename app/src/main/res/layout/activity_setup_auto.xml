@@ -87,9 +87,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="date"
-                android:hint="date (m/d/y)"
+                android:hint="Pick date (m/d/y)"
                 android:ems="10"
                 android:id="@+id/editText3"
+                android:editable="false"
                 android:layout_marginTop="82dp" android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 

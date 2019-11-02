@@ -1,23 +1,27 @@
 package io.github.kaisubr.oregano;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class SetupAuto extends AppCompatActivity {
 
     String name;
     TextView instruct;
     EditText datepick, salary, savings;
+    Button submit;
     final Calendar cal = Calendar.getInstance();
 
     @Override
@@ -29,7 +33,7 @@ public class SetupAuto extends AppCompatActivity {
         datepick = (EditText) findViewById(R.id.editText3);
         salary = (EditText) findViewById(R.id.editText1);
         savings = (EditText) findViewById(R.id.editText2);
-
+        submit = (Button) findViewById(R.id.button);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -65,6 +69,14 @@ public class SetupAuto extends AppCompatActivity {
             }
         });
 
+        datepick.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                datepick.setText(getDateString());
+                return false;
+            }
+        });
+
         salary.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -81,6 +93,63 @@ public class SetupAuto extends AppCompatActivity {
             }
         });
 
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (salary.getText().length() <= 0) {
+                    Toast.makeText(SetupAuto.this, "Salary is empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    long sal = (long)(1. * Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")));
+                    new AlertDialog.Builder(SetupAuto.this)
+                            .setTitle("Suggested budget")
+                            .setMessage(((ctr(necessities(), 0, sal) < 0 || lifestyle() < 0)? "Warning! Your salary isn't enough to save that much per month.\n" : "") +
+                                    ((ctr(necessities(), 0, sal) < 1857)? "Warning! You may not afford necessities. Try lowering your savings.\n\n" : "") +
+                                    "Your suggested budget includes...\n" +
+                                    "$" + ctr(necessities(), 0, sal) + "/month\ton necessities,\n" +
+                                    "$" + ctr(longTerm(), 0, sal)  + "/month\ton long term savings, and\n" +
+                                    "$" + ctr(lifestyle(), 0, sal) + "/month\ton entertainment or lifestyle choices.")
+                            .setPositiveButton("Use", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .setNegativeButton("Fix inputs", null)
+                            .setIcon(android.R.drawable.ic_dialog_info)
+                            .show();
+
+                }
+
+            }
+        });
+
+    }
+
+    private long ctr(long i, long m, long mm) { return compressToRange(i, m, mm); };
+
+    private long compressToRange(long i, long min, long max) {
+        return Math.max(Math.min(i, max), min);
+    }
+
+    private long longTerm() {
+        if (savings.getText().length() > 0) {
+            Date st = Calendar.getInstance().getTime();
+            Date en = cal.getTime();
+            long daydif = TimeUnit.DAYS.convert(Math.abs(en.getTime() - st.getTime()), TimeUnit.MILLISECONDS);
+
+            double dpday = Double.valueOf(savings.getText().toString().replaceAll("[^\\d.]", "")) / daydif;
+
+            return (long)(dpday * 30.5); //about 30.5 days a month
+        } else
+            return (long)(0.2 * (Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", ""))));
+
+    }
+
+    private long necessities() {
+        return (long)(0.5 * (Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")) - (longTerm() - (long)(0.2 * (Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")))))));
+    }
+
+    private long lifestyle() {
+        return (long)(0.3 * (Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")) - (longTerm() - (long)(0.2 * (Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")))))));
     }
 
     private void reformat(EditText t, String pattern) {
@@ -97,8 +166,15 @@ public class SetupAuto extends AppCompatActivity {
     }
 
     private void dateEdit() {
-        String ff = "MM/dd/yyyy";
-        SimpleDateFormat f = new SimpleDateFormat(ff, Locale.US);
-        datepick.setText(f.format(cal.getTime()));
+        datepick.setText(getDateString());
+    }
+
+    private String getDateString() {
+        if (cal.getTime() != null) {
+            String ff = "MM/dd/yyyy";
+            SimpleDateFormat f = new SimpleDateFormat(ff, Locale.US);
+            return f.format(cal.getTime());
+        }
+        return "";
     }
 }
