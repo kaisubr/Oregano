@@ -1,7 +1,9 @@
 package io.github.kaisubr.oregano;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,9 +13,7 @@ import android.widget.*;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class SetupAuto extends AppCompatActivity {
@@ -28,6 +28,8 @@ public class SetupAuto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_auto);
+
+        setTitle("Oregano - Budget Setup");
 
         instruct = (TextView) findViewById(R.id.textView4);
         datepick = (EditText) findViewById(R.id.editText3);
@@ -99,23 +101,49 @@ public class SetupAuto extends AppCompatActivity {
                 if (salary.getText().length() <= 0) {
                     Toast.makeText(SetupAuto.this, "Salary is empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    long sal = (long)(1. * Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")));
-                    new AlertDialog.Builder(SetupAuto.this)
-                            .setTitle("Suggested budget")
-                            .setMessage(((ctr(necessities(), 0, sal) < 0 || lifestyle() < 0)? "Warning! Your salary isn't enough to save that much per month.\n" : "") +
-                                    ((ctr(necessities(), 0, sal) < 1857)? "Warning! You may not afford necessities. Try lowering your savings.\n\n" : "") +
-                                    "Your suggested budget includes...\n" +
-                                    "$" + ctr(necessities(), 0, sal) + "/month\ton necessities,\n" +
-                                    "$" + ctr(longTerm(), 0, sal)  + "/month\ton long term savings, and\n" +
-                                    "$" + ctr(lifestyle(), 0, sal) + "/month\ton entertainment or lifestyle choices.")
-                            .setPositiveButton("Use", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
+                    final ProgressDialog progress = new ProgressDialog(SetupAuto.this);
+                    progress.setTitle("Generating budget");
+                    progress.setMessage("You'll be directed shortly...");
+                    progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+                    progress.show();
 
-                                }
-                            })
-                            .setNegativeButton("Fix inputs", null)
-                            .setIcon(android.R.drawable.ic_dialog_info)
-                            .show();
+                    final long sal = (long)(1. * Double.valueOf(salary.getText().toString().replaceAll("[^\\d.]", "")));
+                    final long n = ctr(necessities(), 0, sal), lt = ctr(longTerm(), 0, sal), lf = ctr(lifestyle(), 0, sal);
+
+                    String[] res = new String[]{String.valueOf(sal), String.valueOf(n), String.valueOf(lt), String.valueOf(lf)};
+                    final Intent i = new Intent(SetupAuto.this, BudgetChartActivity.class);
+                    i.putExtra("budget", res);
+
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            progress.cancel();
+                            startActivity(i);
+                        }
+                    }, 500);
+
+
+
+//                    new AlertDialog.Builder(SetupAuto.this)
+//                            .setTitle("Suggested budget")
+//                            .setMessage(((ctr(necessities(), 0, sal) < 0 || lifestyle() < 0)? "Warning! Your salary isn't enough to save that much per month.\n" : "") +
+//                                    ((ctr(necessities(), 0, sal) < 1857)? "Warning! You may not afford necessities. Try lowering your savings.\n\n" : "") +
+//                                    "Click VIEW to look at your suggested budget.\n" //+
+////                                    "$" + n + "/month on necessities,\n" +
+////                                    "$" + lt + "/month on long term savings, and\n" +
+////                                    "$" + lf + "/month on entertainment or lifestyle choices."
+//                            )
+//                            .setPositiveButton("View", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    String[] res = new String[]{String.valueOf(sal), String.valueOf(n), String.valueOf(lt), String.valueOf(lf)};
+//                                    Intent i = new Intent(SetupAuto.this, BudgetChartActivity.class);
+//                                    i.putExtra("budget", res);
+//                                    startActivity(i);
+//                                }
+//                            })
+//                            .setNegativeButton("Fix inputs", null)
+////                            .setIcon(android.R.drawable.ic_dialog_info)
+//                            .show();
 
                 }
 

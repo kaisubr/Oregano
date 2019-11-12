@@ -8,16 +8,21 @@
         android:padding="0dp"
         android:background="#ffffff"
         tools:context="io.github.kaisubr.oregano.Setup"
+        android:backgroundTint="@color/colorPrimary"
 >
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="25dp"
-            android:layout_alignBottom="@+id/relativeLayout" android:layout_alignParentStart="true">
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:padding="10dp"
+            android:background="@drawable/flat_button"
+            android:layout_above="@+id/relativeLayout"
+            android:id="@+id/relativeLayout5">
         <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="Welcome to Oregano!"
-                android:shadowColor="#444"
+                android:textColor="#000"
+                android:shadowColor="#999"
                 android:shadowDy="0"
                 android:shadowRadius="10"
                 android:textStyle="bold"
@@ -26,20 +31,20 @@
                 android:textSize="30sp"
                 android:id="@+id/welcometv"
                 android:textAlignment="center"/>
-        <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp" app:srcCompat="@drawable/ic_launcherhi"
-                android:id="@+id/imageView2"
-                android:layout_marginTop="17dp" android:layout_below="@+id/welcometv"
-                android:layout_centerHorizontal="true"/>
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" app:srcCompat="@drawable/wavy"
-                android:rotation="90"
-                android:alpha="0.5"
-                android:id="@+id/imageView3"
-                android:layout_marginBottom="116dp"
-                android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+        <!--<ImageView-->
+                <!--android:layout_width="75dp"-->
+                <!--android:layout_height="75dp" app:srcCompat="@drawable/ic_launcherhi"-->
+                <!--android:id="@+id/imageView2"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_below="@+id/welcometv" android:layout_centerHorizontal="true"/>-->
+        <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" app:srcCompat="@drawable/wavy"-->
+        <!--android:rotation="90"-->
+        <!--android:alpha="0.5"-->
+        <!--android:id="@+id/imageView3"-->
+        <!--android:layout_marginBottom="116dp"-->
+        <!--android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>-->
 
     </RelativeLayout>
 
@@ -48,8 +53,18 @@
             android:layout_height="400dp" android:id="@+id/relativeLayout"
             android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"
             android:padding="25dp"
+            android:background="@drawable/flat_button"
     >
 
+        <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Oregano is a budgeting app designed to make saving money easier. Get started by filling in the information below."
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:id="@+id/aboutoregano"
+                android:layout_marginBottom="28dp"
+                android:layout_above="@+id/materialTextField" android:layout_alignParentStart="true"/>
         <com.github.florent37.materialtextfield.MaterialTextField
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,7 +82,7 @@
                     android:textSize="15sp"/>
             <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="What do you go by?"
+                    android:text=" "
                     android:fontFamily="sans-serif-condensed"
                     android:textSize="15sp"
                     android:textStyle="italic"
@@ -76,20 +91,28 @@
                     android:layout_above="@+id/materialTextField" android:layout_centerHorizontal="true"/>
 
         </com.github.florent37.materialtextfield.MaterialTextField>
+
         <Button
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="Manually enter a budget"
-                android:padding="15dp"
-                android:textSize="15sp"
-                android:id="@+id/manualbutton"
-                android:layout_alignParentBottom="true" android:layout_alignStart="@+id/autobutton"/>
-        <Button
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="Automatically generate budget"
-                android:padding="15dp"
+                android:layout_width="match_parent" android:layout_height="55dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/colorAccent"
+                android:text="Automatically generate a budget"
                 android:textSize="15sp"
                 android:id="@+id/autobutton"
-                android:layout_above="@+id/manualbutton" android:layout_alignParentEnd="true"/>
+                android:layout_above="@+id/manualbutton"
+        />
+
+        <Button
+                android:layout_width="match_parent" android:layout_height="55dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="@color/colorAccent"
+                android:text="Manually enter a budget"
+                android:layout_marginTop="2dp"
+                android:textSize="15sp"
+                android:id="@+id/manualbutton"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/autobutton"/>
+
         <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="Next, select an option to begin setting up a budget."
