@@ -1,1 +1,2 @@
-<video src="video_v1.mp4" width="320" height="200" controls preload></video>
+<!-- <a href="{video-url}" title="Link Title"><img src="{image-url}" alt="Alternate Text" /></a> -->
+<a href="video_v1.mp4" title="video">View sample video</a>
