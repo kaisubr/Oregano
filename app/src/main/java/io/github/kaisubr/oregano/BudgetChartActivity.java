@@ -1,10 +1,13 @@
 package io.github.kaisubr.oregano;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -28,6 +31,9 @@ public class BudgetChartActivity extends AppCompatActivity {
         setTitle("Oregano - Current Budget Allocations");
         chart = (PieChart) findViewById(R.id.chart);
 
+        Button fix = (Button) findViewById(R.id.buttonFix);
+        Button use = (Button) findViewById(R.id.buttonUse);
+
         Bundle extras = getIntent().getExtras();
         long[] alloc; float expectedTotal = 0, total = 0; long necessities = 0, savings = 0, lifestyle = 0;
 
@@ -36,6 +42,7 @@ public class BudgetChartActivity extends AppCompatActivity {
             alloc = new long[allocations.length];
 
             for (int i = 0; i < allocations.length; i++) {
+                Log.d("BudgetChartActivity", "Looking at " + alloc[i]);
                 alloc[i] = Long.valueOf(allocations[i]);
             }
 
@@ -103,5 +110,30 @@ public class BudgetChartActivity extends AppCompatActivity {
 
         chart.highlightValues(null);
         chart.invalidate();
+
+        final long n = necessities, s = savings, l = lifestyle;
+        use.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                long[] res = new long[]{n, s, l};
+                final Intent i = new Intent(BudgetChartActivity.this, MainActivity.class);
+                i.putExtra("budget", res);
+                startActivity(i);
+            }
+        });
+
+        fix.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed(); //override (below) to use.
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -7,10 +7,30 @@
         android:layout_height="match_parent"
         tools:context="io.github.kaisubr.oregano.BudgetChartActivity">
 
-    <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <RelativeLayout android:layout_height="500dp" android:layout_width="match_parent" android:id="@+id/relativeLayout6">
+        <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+        </com.github.mikephil.charting.charts.PieChart>
+    </RelativeLayout>
+
+    <Button
+            android:text="Fix/Restart"
+            android:backgroundTint="@color/colorAccentLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/buttonFix" android:layout_below="@+id/relativeLayout6"
+            android:layout_margin="10dp"
+            android:layout_marginTop="26dp"/>
+
+    <Button
+            android:text="Looks good!"
+            android:backgroundTint="@color/colorPrimaryLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/buttonUse"
+            android:layout_alignBaseline="@+id/buttonFix" android:layout_alignBottom="@+id/buttonFix"
+            android:layout_margin="10dp"
+            android:layout_alignParentEnd="true"/>
 
 
 </RelativeLayout>

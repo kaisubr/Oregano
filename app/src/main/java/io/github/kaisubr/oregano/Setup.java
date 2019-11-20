@@ -44,7 +44,7 @@ public class Setup extends Activity {
             @Override
             public void onClick(View view) {
                 String name = nameText.getText().toString();
-                Intent i = new Intent(Setup.this, SetupAuto.class);
+                Intent i = new Intent(Setup.this, SetupManual.class);
                 i.putExtra("name", name);
                 startActivity(i);
             }
